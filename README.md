@@ -36,4 +36,15 @@ $listInfo = $app->getMyVideos();
 
 # refresh token
 $newToken = $app->refreshAccessToken('*** YOUR REFRESH TOKEN ***');    
+
+# upload video
+$task = new VideoUploadTask($app);
+$task->title = '测试视频001';
+$task->category = VideoUploadTask::CAT_OTHERS;
+$task->copyrightType = VideoUploadTask::COPYRIGHT_ORIGINAL;
+$task->publicType = VideoUploadTask::PUBLIC_ALL;
+$task->description = '这是测试视频';
+$task->tags = array('测试');
+$task->file = __DIR__.'/../Resource/big_buck_bunny.mp4';
+$task->start();
 ```

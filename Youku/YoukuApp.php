@@ -49,12 +49,7 @@ class YoukuApp {
             'grant_type' => 'refresh_token',
             'refresh_token' => $refreshToken,
         );
-        $url = 'https://api.youku.com/oauth2/token.json';
-        $response = $this->httpRequestJson('post', $url, $params);
-        if ( isset($response['error']) ) {
-            throw new YoukuException('failed to list videos : '.$response['error']['description']);
-        }
-        return $response;
+        return $this->call('POST', 'oauth2/token', $params);
     }
     
     /**
@@ -73,12 +68,7 @@ class YoukuApp {
             'count' => $size,
             'state' => implode(',', $state),
         );
-        $url = 'https://api.youku.com/videos/by_me.json?'.http_build_query($params);
-        $response = $this->httpRequestJson('GET', $url);
-        if ( isset($response['error']) ) {
-            throw new YoukuException('failed to list videos : '.$response['error']['description']);
-        }
-        return $response;
+        return $this->call('GET', 'videos/by_me', $params);
     }
     
     /**
@@ -92,37 +82,52 @@ class YoukuApp {
             'video_id' => $id,
             'ext' => (null===$attrs) ? null : implode(',', $attrs),
         );
-        $url = 'https://api.youku.com/videos/show.json?'.http_build_query($params);
-        $response = $this->httpRequestJson('GET', $url);
-        if ( isset($response['error']) ) {
-            throw new YoukuException('failed to get youku video info : '.$response['error']['description']);
-        }
-        return $response;
+        return $this->call('GET', 'videos/show', $params);
     }
     
     /**
-     * @param unknown $method
-     * @param unknown $url
-     * @param array $params
+     * @param string $method GET/POST
+     * @param string $name the name of api
+     * @param array $params params api
+     * @throws YoukuException
      * @return array
      */
-    private function httpRequestJson( $method, $url, $params=array() ) {
+    public function call( $method, $name, $params=array() ) {
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HEADER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        if ( 'post' === $method ) {
+        
+        $url = 'https://api.youku.com/'.$name.'.json';
+        switch ( strtoupper($method) ) {
+        case 'GET' :
+            if ( !empty($params) ) {
+                $url = $url.'?'.http_build_query($params);
+            }
+            curl_setopt($ch, CURLOPT_URL, $url);
+            break;
+        case 'POST' ;
             curl_setopt($ch, CURLOPT_POST,true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+            curl_setopt($ch, CURLOPT_URL, $url);
+            break;
+        default : 
+            throw new YoukuException('failed to call youku api with method `'.$method,'`');
         }
+        
         $response = curl_exec($ch);
         if ( 0 !== curl_errno($ch) ) {
             throw new YoukuException('failed to call youku api : '.curl_error($ch));
         }
-        
         curl_close($ch);
+        
         $response = json_decode($response, true);
+        if ( isset($response['error']) ) {
+            throw new YoukuException(
+                "failed to call youku api `{$name}` : {$response['error']['description']}", 
+                $response['error']['code']
+            );
+        }
         return $response;
     }
 }

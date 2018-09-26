@@ -16,7 +16,7 @@ return array(
         'params' => array(
             'apps' => array(
                 'youkutestapp' => array(
-                    'appid' => '*** YOUR APP ID ***',
+                    'appid' => '********',
                 ),
             )
         ),
