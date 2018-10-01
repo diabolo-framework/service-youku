@@ -48,3 +48,29 @@ $task->tags = array('测试');
 $task->file = __DIR__.'/../Resource/big_buck_bunny.mp4';
 $task->start();
 ```
+
+# command usage
+```
+# get video information 
+$ php index.php service/youku/video/info XMzgzNzYwMDk5Ng==
+id : XMzgzNzYwMDk5Ng==
+title : 杨洋 上海杜莎夫人蜡像馆 蜡像量身
+link : http://v.youku.com/v_show/id_XMzgzNzYwMDk5Ng==.html
+bigThumbnail : 87.00
+category : 旅游
+state : normal
+created : 2018-09-25 22:15:29
+published : 2018-09-26 03:00:37
+description : 杨洋 上海杜莎夫人蜡像馆 蜡像量身 Yang Yang Madame Tussauds Body Measurements
+player : http://player.youku.com/player.php/sid/XMzgzNzYwMDk5Ng==/partnerid/d7965f53d2a3e9ea/v.swf
+public_type : all
+copyright_type : reproduced
+user id : 818042065
+user name : 酸核桃_com
+user link : http://i.youku.com/i/UMzI3MjE2ODI2MA==
+tags : 上海杜莎夫人蜡像馆
+view_count : 34
+operation_limit : 
+streamtypes : 3gphd,flvhd,hd,hd2
+
+```
