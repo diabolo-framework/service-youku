@@ -121,6 +121,11 @@ class VideoUploadTask {
      * @var string
      * */
     public $file;
+    /** 
+     * 进度回调
+     * @var callback 
+     * */
+    public $progressCallback = null;
     
     /** YoukuApp */
     private $app = null;
@@ -163,6 +168,9 @@ class VideoUploadTask {
         $length = $fitstSlice['length'];
         
         do {
+            if ( null !== $this->progressCallback ) {
+                call_user_func_array($this->progressCallback, array($this,$offset));
+            }
             $nextSlice = $this->uploadSlice($sliceId, $offset, $length);
             
             $uploadServerIp = null;
