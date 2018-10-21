@@ -192,8 +192,7 @@ class VideoUploadTask {
     private function createFile() {
         $params = array();
         $params['title'] = $this->title;
-        $params['tags'] = implode(',', $this->tags);
-        $params['tags'] = array_filter($params['tags']);
+        $params['tags'] = implode(',', array_filter($this->tags));
         
         $params['category'] = $this->category;
         $params['copyright_type'] = $this->copyrightType;
