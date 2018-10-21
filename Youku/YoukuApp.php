@@ -123,10 +123,13 @@ class YoukuApp {
         
         $response = json_decode($response, true);
         if ( isset($response['error']) ) {
-            throw new YoukuException(
-                "failed to call youku api `{$name}` : {$response['error']['description']}", 
-                $response['error']['code']
+            $message = array(
+                "failed to call youku api `{$name}` : {$response['error']['description']}",
+                "URL : {$url}",
+                "Method : {$method}",
+                "Params : ".http_build_query($params),
             );
+            throw new YoukuException(implode("\n", $message),$response['error']['code']);
         }
         return $response;
     }
