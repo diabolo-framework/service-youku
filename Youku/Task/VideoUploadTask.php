@@ -193,6 +193,8 @@ class VideoUploadTask {
         $params = array();
         $params['title'] = $this->title;
         $params['tags'] = implode(',', $this->tags);
+        $params['tags'] = array_filter($params['tags']);
+        
         $params['category'] = $this->category;
         $params['copyright_type'] = $this->copyrightType;
         $params['public_type'] = $this->publicType;
