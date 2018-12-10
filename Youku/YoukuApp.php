@@ -72,6 +72,19 @@ class YoukuApp {
     }
     
     /**
+     * 统计当前账号下上传的视频数量
+     * @return integer
+     */
+    public function getMyVideoCount($state=null) {
+        $states = array();
+        if ( null !== $state ) {
+            $states[] = $state;
+        }
+        $totalCount = $this->getMyVideos(1,1,'published',$states);
+        return $totalCount['total'];
+    }
+    
+    /**
      * @param string $id
      * @param array $attrs
      * @link http://cloud.youku.com/docs?id=46
